@@ -30,3 +30,28 @@ aws ec2 describe-images \
   --output text | sort -k2
 ```
 
+Once the VM is up, you can get the instance ID with
+```
+aws ec2 describe-instances \
+  --filters "Name=instance-state-name,Values=running" \
+  --query "Reservations[*].Instances[*].InstanceId" \
+  --output text
+```
+
+Get the logs with
+```
+aws ec2 get-console-output \
+  --instance-id i-xxxxxxxxxxxxx \
+  --query 'Output' \
+  --output text | base64 --decode
+```
+
+ssh on with
+```
+ssh -i ~/.ssh/<your key file> ubuntu@<ip address from stack>
+```
+
+Then dump the init script logs with
+```
+sudo cat /var/log/cloud-init-output.log
+```
