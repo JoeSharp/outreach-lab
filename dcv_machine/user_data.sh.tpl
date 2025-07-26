@@ -17,18 +17,18 @@ rm NICE-GPG-KEY
 
 # Download and install NICE DCV server
 DCV_VERSION="2024.0-19030"  # Update as needed
-wget https://d1uj6qtbmh3dt5.cloudfront.net/2024.0/Servers/nice-dcv-${DCV_VERSION}-ubuntu2204-x86_64.tgz
-tar -xvzf nice-dcv-${DCV_VERSION}-ubuntu2204-x86_64.tgz
-cd nice-dcv-${DCV_VERSION}-ubuntu2204-x86_64
+wget https://d1uj6qtbmh3dt5.cloudfront.net/2024.0/Servers/nice-dcv-$${DCV_VERSION}-ubuntu2204-x86_64.tgz
+tar -xvzf nice-dcv-$${DCV_VERSION}-ubuntu2204-x86_64.tgz
+cd nice-dcv-$${DCV_VERSION}-ubuntu2204-x86_64
 sudo apt install -y ./nice-dcv-server_*.deb ./nice-dcv-web-viewer_*.deb ./nice-xdcv_*.deb
 
 # Add a student user with password
-useradd -m -s /bin/bash student
-echo 'student:Student123!' | chpasswd
+useradd -m -s /bin/bash ${username}
+echo '${username}:${password}' | chpasswd
 
 # Set up XFCE as the default session
 echo 'exec startxfce4' > /home/student/.xsession
-chown student:student /home/student/.xsession
+chown ${username}:${username} /home/student/.xsession
 
 # Enable DCV server
 systemctl enable dcvserver
@@ -41,5 +41,5 @@ until sudo dcv list-sessions &>/dev/null; do
 done
 
 # Create a session
-echo "Creating a DCV session for the student"
-sudo dcv create-session --owner student --type=virtual student-session
+echo "Creating a DCV session for ${username}"
+sudo dcv create-session --owner ${username} --type=virtual student-session

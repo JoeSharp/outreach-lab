@@ -19,17 +19,6 @@ You can get your IP with
 curl https://checkip.amazonaws.com
 ```
 
-You can get the AMI value with
-```
-aws ec2 describe-images \
-  --owners 099720109477 \
-  --filters "Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*" \
-            "Name=architecture,Values=x86_64" \
-            "Name=virtualization-type,Values=hvm" \
-  --query "Images[*].[ImageId,Name]" \
-  --output text | sort -k2
-```
-
 Once the VM is up, you can get the instance ID with
 ```
 aws ec2 describe-instances \

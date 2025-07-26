@@ -10,20 +10,9 @@ variable "instance_type" {
   default     = "t3.large"
 }
 
-variable "key_name" {
-  description = "Name of your AWS EC2 key pair"
-  type        = string
-}
-
 variable "public_key_path" {
   description = "Path to your public SSH key"
   type        = string
-}
-
-variable "ubuntu_ami" {
-  description = "AMI ID for Ubuntu 22.04"
-  type        = string
-  # You can hardcode or fetch dynamically with data sources if you like
 }
 
 variable "my_ip_cidr" {
@@ -31,3 +20,7 @@ variable "my_ip_cidr" {
   type        = string
 }
 
+variable "key_name" {
+  description = "Name of your AWS EC2 key pair"
+  type        = string
+}
