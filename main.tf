@@ -4,7 +4,7 @@ provider "aws" {
 
 module "dcv_lab" {
 	source = "./dcv_machine"
-	count = 2
+	count = 1
 	lab_name = "sports_day"
 	username = "student"
 	password = "mypassword"
