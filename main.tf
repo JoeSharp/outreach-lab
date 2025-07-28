@@ -30,12 +30,10 @@ resource "aws_security_group" "dcv_sg" {
   }
 }
 
-module "dcv_lab" {
-	source = "./dcv_machine"
-	count = 1
+module "student_lab" {
+	source = "./ansible_machine"
+	count = 0
 	lab_name = "sports_day"
-	username = "student"
-	password = "mypassword"
 	security_group_id = aws_security_group.dcv_sg.id
 	instance_type = var.instance_type
 	instance_id = count.index

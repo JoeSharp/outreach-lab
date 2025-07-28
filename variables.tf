@@ -15,6 +15,11 @@ variable "public_key_path" {
   type        = string
 }
 
+variable "private_key_path" {
+  description = "Path to your private SSH key"
+  type        = string
+}
+
 variable "my_ip_cidr" {
   description = "Your IP in CIDR format (e.g. 1.2.3.4/32) to allow SSH"
   type        = string
