@@ -3,6 +3,11 @@ variable "instance_id" {
   type        = string
 }
 
+variable "security_group_id" {
+  description = "The ID of the security group"
+  type        = string
+}
+
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
@@ -27,10 +32,5 @@ variable "password" {
 
 variable "key_name" {
   description = "Name of your AWS EC2 key pair"
-  type        = string
-}
-
-variable "my_ip_cidr" {
-  description = "Your IP in CIDR format (e.g. 1.2.3.4/32) to allow SSH"
   type        = string
 }
