@@ -13,6 +13,27 @@ resource "aws_iam_role" "ec2_role" {
   })
 }
 
+resource "aws_iam_policy" "dcv_license_access" {
+  name        = "dcv-lab-license-access"
+  description = "Allow EC2 to fetch DCV License from S3"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+           "Effect": "Allow",
+           "Action": "s3:GetObject",
+           "Resource": "arn:aws:s3:::dcv-license.region/*"
+       }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "attach_dcv_policy" {
+  role       = aws_iam_role.ec2_role.name
+  policy_arn = aws_iam_policy.dcv_license_access.arn
+}
+
 resource "aws_iam_policy" "s3_object_access" {
   name        = "dcv-lab-s3-object-access"
   description = "Allow EC2 to fetch playbook.yml from S3"
@@ -25,7 +46,7 @@ resource "aws_iam_policy" "s3_object_access" {
         Action = [
           "s3:GetObject"
         ]
-        Resource = "arn:aws:s3:::${var.ansible_playbook.key}"
+        Resource = "arn:aws:s3:::${var.ansible_playbook}"
       }
     ]
   })
@@ -49,7 +70,9 @@ resource "aws_instance" "student_vm" {
   vpc_security_group_ids = [var.security_group_id]
 
   user_data              = templatefile("${path.module}/user_data.tpl.sh", {
-    ansible_playbook = var.ansible_playbook
+    ansible_playbook  = var.ansible_playbook
+    username          = var.username
+    password          = var.password
   })
 
   tags = {

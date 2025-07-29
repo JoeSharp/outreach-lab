@@ -46,6 +46,8 @@ module "student_lab" {
 	instance_id = count.index
 	key_name = aws_key_pair.student_key.key_name
 	ansible_playbook = module.ansible_playbook.playbook
+	username = "student"
+	password = "mysecurepassword2018"
 	providers = {
 		aws = aws
 	}

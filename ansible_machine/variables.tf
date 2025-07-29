@@ -20,9 +20,16 @@ variable "key_name" {
 }
 
 variable "ansible_playbook" {
-  description = "URL of the Ansible Playbook"
-  type        = object({
-    bucket = string
-    key = string
-  })
+  description = "ARN of the Ansible Playbook"
+  type        = string
+}
+
+variable "username" {
+  description = "Username for the DCV session"
+  type = string
+}
+
+variable "password" {
+  description = "Password for the DCV session"
+  type = string
 }

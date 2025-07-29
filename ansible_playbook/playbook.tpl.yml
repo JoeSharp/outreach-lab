@@ -4,24 +4,9 @@
   become: true
 
   tasks:
-    - name: Create lab user
-      user:
-        name: "${username}"
-        password: "{{ '${password}' | password_hash('sha512') }}"
-        shell: /bin/bash
-        groups: sudo
+   - name: Ping my hosts
+     ansible.builtin.ping:
 
-    - name: Install NICE DCV (placeholder)
-      apt:
-        name: wget
-        state: present
-      # You can later replace this with script or role to install DCV
-
-    - name: Create DCV session directory
-      file:
-        path: "/home/${username}/session"
-        state: directory
-        owner: ${username}
-        group: ${username}
-        mode: '0755'
-
+   - name: Print message
+     ansible.builtin.debug:
+       msg: Hello world

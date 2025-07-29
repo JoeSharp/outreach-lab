@@ -21,10 +21,7 @@ resource "aws_s3_object" "ansible_playbook" {
 }
 
 output "playbook" {
-  description = "S3 Bucket ID"
-  value = {
-    bucket = aws_s3_bucket.playbook_bucket.id
-    key = aws_s3_object.ansible_playbook.id
-  }
+  description = "S3 Bucket ARN"
+  value = aws_s3_object.ansible_playbook.id
 }
 

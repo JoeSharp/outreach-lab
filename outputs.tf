@@ -8,3 +8,8 @@ output "ansible_playbook" {
   value       = module.ansible_playbook.playbook
 }
 
+output "lab_dcv_urls" {
+  description = "DCV URLs of Lab Machines"
+  value = [for s in module.student_lab : s.dcv_url]
+}
+
