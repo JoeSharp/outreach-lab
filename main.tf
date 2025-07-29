@@ -2,6 +2,14 @@ provider "aws" {
   region = var.aws_region
 }
 
+module "my_ip_cidr" {
+	source = "./my_ip_cidr"
+}
+
+module "ansible_playbook" {
+	source = "./ansible_playbook"
+}
+
 resource "aws_security_group" "dcv_sg" {
   name        = "student-dcv-sg"
   description = "Allow SSH and NICE DCV access"
@@ -11,7 +19,7 @@ resource "aws_security_group" "dcv_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.my_ip_cidr]
+    cidr_blocks = [module.my_ip_cidr.value]
   }
 
   ingress {
@@ -32,12 +40,12 @@ resource "aws_security_group" "dcv_sg" {
 
 module "student_lab" {
 	source = "./ansible_machine"
-	count = 0
-	lab_name = "sports_day"
+	count = 1
 	security_group_id = aws_security_group.dcv_sg.id
 	instance_type = var.instance_type
 	instance_id = count.index
 	key_name = aws_key_pair.student_key.key_name
+	ansible_playbook = module.ansible_playbook.playbook
 	providers = {
 		aws = aws
 	}

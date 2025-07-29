@@ -18,3 +18,11 @@ variable "key_name" {
   description = "Name of your AWS EC2 key pair"
   type        = string
 }
+
+variable "ansible_playbook" {
+  description = "URL of the Ansible Playbook"
+  type        = object({
+    bucket = string
+    key = string
+  })
+}

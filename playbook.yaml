@@ -1,0 +1,27 @@
+---
+- name: Minimal DCV Lab Setup
+  hosts: localhost
+  become: true
+
+  tasks:
+    - name: Create lab user
+      user:
+        name: "student"
+        password: "{{ 'SecurePass123' | password_hash('sha512') }}"
+        shell: /bin/bash
+        groups: sudo
+
+    - name: Install NICE DCV (placeholder)
+      apt:
+        name: wget
+        state: present
+      # You can later replace this with script or role to install DCV
+
+    - name: Create DCV session directory
+      file:
+        path: "/home/student/session"
+        state: directory
+        owner: student
+        group: student
+        mode: '0755'
+
