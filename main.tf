@@ -6,10 +6,6 @@ module "my_ip_cidr" {
 	source = "./my_ip_cidr"
 }
 
-module "ansible_playbook" {
-	source = "./ansible_playbook"
-}
-
 resource "aws_security_group" "dcv_sg" {
   name        = "student-dcv-sg"
   description = "Allow SSH and NICE DCV access"
@@ -39,13 +35,12 @@ resource "aws_security_group" "dcv_sg" {
 }
 
 module "student_lab" {
-	source = "./ansible_machine"
+	source = "./student_machine"
 	count = 1
 	security_group_id = aws_security_group.dcv_sg.id
 	instance_type = var.instance_type
 	instance_id = count.index
 	key_name = aws_key_pair.student_key.key_name
-	ansible_playbook = module.ansible_playbook.playbook
 	username = "student"
 	password = "mysecurepassword2018"
 	providers = {

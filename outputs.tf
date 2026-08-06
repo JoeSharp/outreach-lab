@@ -3,13 +3,13 @@ output "my_ip_add" {
   value       = module.my_ip_cidr.value
 }
 
-output "ansible_playbook" {
-  description = "S3 Bucket for Playbook"
-  value       = module.ansible_playbook.playbook
-}
-
 output "lab_dcv_urls" {
   description = "DCV URLs of Lab Machines"
   value = [for s in module.student_lab : s.dcv_url]
+}
+
+output "lab_public_ips" {
+  description = "Public IP addresses of Lab Machines"
+  value = [for s in module.student_lab : s.instance_public_ip]
 }
 

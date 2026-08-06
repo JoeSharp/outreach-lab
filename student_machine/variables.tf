@@ -19,11 +19,6 @@ variable "key_name" {
   type        = string
 }
 
-variable "ansible_playbook" {
-  description = "ARN of the Ansible Playbook"
-  type        = string
-}
-
 variable "username" {
   description = "Username for the DCV session"
   type = string

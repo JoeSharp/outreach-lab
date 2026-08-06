@@ -2,24 +2,13 @@
 set -eux
 
 # Update software
-apt-add-repository --yes --update ppa:ansible/ansible
 apt update && apt upgrade -y
 
 # Install XFCE
 DEBIAN_FRONTEND=noninteractive apt install -y xfce4 xfce4-goodies x11-xserver-utils
 
 # Install required dependencies
-apt install -y \
-	wget \
-	curl \
-	unzip \
-	build-essential \
-	awscli \
-	software-properties-common \
-	ansible \
-	git \
-	python3-passlib \
-	unzip 
+apt install -y wget awscli
 
 # Import NICE DCV GPG key
 wget https://d1uj6qtbmh3dt5.cloudfront.net/NICE-GPG-KEY
@@ -41,6 +30,10 @@ echo '${username}:${password}' | chpasswd
 echo 'exec startxfce4' > /home/${username}/.xsession
 chown ${username}:${username} /home/${username}/.xsession
 
+# Get rid of those annoying color management services that interfere with DCV
+systemctl mask colord.service || true
+systemctl mask xiccd.service || true
+
 # Enable DCV server
 systemctl enable dcvserver
 systemctl start dcvserver
@@ -54,15 +47,3 @@ done
 # Create a session
 echo "Creating a DCV session for ${username}"
 dcv create-session --owner ${username} --type=virtual student-session
-
-# Install AWS CLI
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-./aws/install
-
-# Fetch the Ansible playbook
-aws s3 cp s3://${ansible_playbook} /opt/ansible/playbook.yml
-
-# Run playbook
-ansible-playbook /opt/ansible/playbook.yml
-

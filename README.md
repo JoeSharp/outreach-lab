@@ -3,6 +3,7 @@
 This is a set of scripts for spinning up an lab of VMs in AWS for use in Outreach activities.
 
 ## Running
+
 Create a file in the same directory `terraform.tfvars`
 
 give it contents such as this
@@ -10,16 +11,23 @@ give it contents such as this
 ```
 key_name        = "my-student-key"
 public_key_path = "~/.ssh/my_student_lab_key.pub"
-ubuntu_ami      = "ami-019a63e66799737f9"  # Replace with real AMI ID
-my_ip_cidr      = "<lookup your ip>"        # Your IP address for SSH access
+```
+
+I used to need these, but they are derived now by the my_ip_cidr and ubuntu_ami modules.
+
+```
+#ubuntu_ami      = "ami-0224ce6f9504665ee"  # Replace with real AMI ID
+#my_ip_cidr      = "<lookup your ip>"        # Your IP address for SSH access
 ```
 
 You can get your IP with
+
 ```
 curl https://checkip.amazonaws.com
 ```
 
 Once the VM is up, you can get the instance ID with
+
 ```
 aws ec2 describe-instances \
   --filters "Name=instance-state-name,Values=running" \
@@ -28,19 +36,38 @@ aws ec2 describe-instances \
 ```
 
 Get the logs with
+
 ```
 aws ec2 get-console-output \
   --instance-id i-xxxxxxxxxxxxx \
   --query 'Output' \
-  --output text | base64 --decode
+  --output text
+
+# Used to need this on the end, doesn't seem to now
+   | base64 --decode
 ```
 
 ssh on with
+
 ```
 ssh -i ~/.ssh/<your key file> ubuntu@<ip address from stack>
 ```
 
 Then dump the init script logs with
+
 ```
 sudo cat /var/log/cloud-init-output.log
+```
+
+## Running Terraform
+
+```bash
+# Run once to sort out the backend
+terraform init
+
+# See what will be run
+terraform plan
+
+# Actually do the business
+terraform apply
 ```
