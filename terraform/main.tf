@@ -2,10 +2,6 @@ provider "aws" {
   region = var.aws_region
 }
 
-module "my_ip_cidr" {
-	source = "./my_ip_cidr"
-}
-
 resource "aws_security_group" "dcv_sg" {
   name        = "student-dcv-sg"
   description = "Allow SSH and NICE DCV access"
@@ -15,7 +11,7 @@ resource "aws_security_group" "dcv_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [module.my_ip_cidr.value]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
@@ -23,7 +19,7 @@ resource "aws_security_group" "dcv_sg" {
     from_port   = 8443
     to_port     = 8443
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # or lock to your school IPs
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {

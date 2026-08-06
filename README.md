@@ -10,7 +10,8 @@ give it contents such as this
 
 ```
 key_name        = "my-student-key"
-public_key_path = "~/.ssh/my_student_lab_key.pub"
+ssh_public_key_path = "~/.ssh/my_student_lab_key.pub"
+ssh_private_key_path = "~/.ssh/my_student_lab_key.pub"
 ```
 
 I used to need these, but they are derived now by the my_ip_cidr and ubuntu_ami modules.
@@ -61,6 +62,8 @@ sudo cat /var/log/cloud-init-output.log
 
 ## Running Terraform
 
+Inside the `terraform` directory.
+
 ```bash
 # Run once to sort out the backend
 terraform init
@@ -70,4 +73,12 @@ terraform plan
 
 # Actually do the business
 terraform apply
+```
+
+## Running ansible
+
+Once the terraform has applied, it should have created an inventory in `ansible/inventory.ini` and the setup to connect in `ansible/group_vars/lab.yml`
+
+```bash
+ansible-playbook -i inventory.ini ping.yml
 ```
