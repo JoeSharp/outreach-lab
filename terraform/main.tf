@@ -37,8 +37,6 @@ module "student_lab" {
 	instance_type = var.instance_type
 	instance_id = count.index
 	key_name = aws_key_pair.student_key.key_name
-	username = "student"
-	password = "mysecurepassword2018"
 	providers = {
 		aws = aws
 	}

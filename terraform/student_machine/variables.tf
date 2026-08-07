@@ -11,20 +11,9 @@ variable "security_group_id" {
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
-  default     = "t3.large"
 }
 
 variable "key_name" {
   description = "Name of your AWS EC2 key pair"
   type        = string
-}
-
-variable "username" {
-  description = "Username for the DCV session"
-  type = string
-}
-
-variable "password" {
-  description = "Password for the DCV session"
-  type = string
 }

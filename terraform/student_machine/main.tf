@@ -46,11 +46,6 @@ resource "aws_instance" "student_vm" {
   key_name               = var.key_name
   vpc_security_group_ids = [var.security_group_id]
 
-  user_data              = templatefile("${path.module}/user_data.tpl.sh", {
-    username          = var.username
-    password          = var.password
-  })
-
   tags = {
     Name = "student-desktop"
   }
