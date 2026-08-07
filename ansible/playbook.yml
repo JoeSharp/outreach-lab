@@ -1,0 +1,85 @@
+- hosts: lab
+  gather_facts: no
+  tasks:
+    - name: Install Git
+      become: yes
+      apt:
+        name: git
+        state: present
+        update_cache: yes
+    - name: Install build essentials
+      become: yes
+      apt:
+        name: build-essential
+        state: present
+        update_cache: yes
+
+    - name: Clone repo
+      become: false
+      git:
+        repo: https://github.com/IIG-FUSION/iig-fusion.github.io.git
+        dest: /home/ubuntu/git/iig-fusion.github.io
+        version: main
+        accept_hostkey: yes
+
+    - name: Download Just binary tarball
+      become: yes
+      get_url:
+        url: https://github.com/casey/just/releases/download/1.58.0/just-1.58.0-x86_64-unknown-linux-musl.tar.gz
+        dest: /tmp/just.tar.gz
+
+    - name: Extract Just binary
+      become: yes
+      unarchive:
+        src: /tmp/just.tar.gz
+        dest: /usr/local/bin/
+        remote_src: yes
+
+    - name: Ensure Just binary is executable
+      become: yes
+      file:
+        path: /usr/local/bin/just
+        mode: '0755'
+
+    - name: Check if NVM is installed
+      stat:
+        path: /home/ubuntu/.nvm/nvm.sh
+      register: nvm_installed
+    - name: Install NVM
+      become: false
+      shell: |
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+      args:
+        executable: /bin/bash
+      when: not nvm_installed.stat.exists
+
+    - name: Install Node version from .nvmrc
+      become: false
+      shell: |
+        export NVM_DIR="$HOME/.nvm"
+        source "$NVM_DIR/nvm.sh"
+        nvm install
+      args:
+        chdir: /home/ubuntu/git/iig-fusion.github.io
+        executable: /bin/bash
+
+    - name: Set default Node version to .nvmrc version
+      become: false
+      shell: |
+        export NVM_DIR="$HOME/.nvm"
+        source "$NVM_DIR/nvm.sh"
+        nvm alias default $(cat .nvmrc)
+      args:
+        chdir: /home/ubuntu/git/iig-fusion.github.io
+        executable: /bin/bash
+
+    - name: Run project justfile
+      become: false
+      shell: |
+        export NVM_DIR="$HOME/.nvm"
+        source "$NVM_DIR/nvm.sh"
+        just build
+      args:
+        chdir: /home/ubuntu/git/iig-fusion.github.io
+        executable: /bin/bash
+

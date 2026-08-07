@@ -1,0 +1,16 @@
+- hosts: lab
+  gather_facts: no
+  tasks:
+    - name: Install build essentials for Rust/Cargo
+      become: yes
+      apt:
+        name: build-essential
+        state: present
+        update_cache: yes
+
+    - name: Install Rust via rustup
+      become: false
+      shell: |
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+      args:
+        executable: /bin/bash
