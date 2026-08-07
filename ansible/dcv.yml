@@ -1,0 +1,13 @@
+- hosts: lab
+  gather_facts: no
+  tasks:
+    - name: Check if DCV session exists
+      shell: dcv list-sessions | grep -q student-session
+      register: dcv_session_exists
+      failed_when: false
+      changed_when: false
+
+    - name: Create DCV session
+      shell: dcv create-session student-session --owner student
+      when: dcv_session_exists.rc != 0
+
