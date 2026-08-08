@@ -17,15 +17,11 @@
 - name: Add GOPATH and PATH for both users
   become: true
   lineinfile:
-    path: "{{ item }}/.bashrc"
+    path: "/home/{{ student_user }}/.bashrc"
     line: |
       export GOPATH=$HOME/go
       export PATH=$PATH:/usr/local/go/bin
     insertafter: EOF
-  loop:
-    - "/home/{{ student_user }}"
-    - "/home/{{ ansible_user }}"
-    - "/root"
 
 - name: Add GOPATH to student shell
   become: true
@@ -33,7 +29,3 @@
     path: "/home/{{ student_user }}/.bashrc"
     line: 'export GOPATH=$HOME/go'
     insertafter: EOF
-  loop:
-    - "/home/{{ student_user }}"
-    - "/home/{{ ansible_user }}"
-    - "/root"

@@ -13,7 +13,7 @@
   become_user: "{{ student_user }}"
 
 - name: Create DCV session for student
-  command: "dcv create-session {{ student_user }}"
+  command: "dcv create-session student-session --owner {{ student_user }} --type virtual"
   args:
     creates: "/var/run/dcv/session/{{ student_user }}"
   become_user: "{{ student_user }}"
