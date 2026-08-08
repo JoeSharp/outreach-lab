@@ -46,6 +46,12 @@ resource "aws_instance" "student_vm" {
   key_name               = var.key_name
   vpc_security_group_ids = [var.security_group_id]
 
+  root_block_device {
+    volume_size = var.root_volume_size
+    volume_type = "gp3" 
+    encrypted   = true
+  }
+
   tags = {
     Name = "student-desktop"
   }

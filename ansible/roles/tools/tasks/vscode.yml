@@ -1,0 +1,39 @@
+- name: Check if VSCode is installed
+  command: which code
+  register: code_exists
+  failed_when: false
+  changed_when: false
+
+- block:
+  - name: Add Microsoft GPG key
+    become: true
+    apt_key:
+      url: https://packages.microsoft.com/keys/microsoft.asc
+      state: present
+
+  - name: Add VS Code repository
+    become: true
+    apt_repository:
+      repo: "deb [arch=amd64] https://packages.microsoft.com/repos/code stable main"
+      state: present
+
+  - name: Install VS Code
+    become: true
+    apt:
+      name: code
+      state: present
+      update_cache: yes
+
+  - name: Install VS Code extensions
+    become: true
+    become_user: "{{ student_user }}"
+    shell: |
+      code --install-extension rust-lang.rust-analyzer
+      code --install-extension golang.go
+      code --install-extension ms-azuretools.vscode-docker
+      code --install-extension dbaeumer.vscode-eslint
+      code --install-extension esbenp.prettier-vscode
+    args:
+      creates: "/home/{{ student_user }}/.vscode/extensions"
+
+  when: code_exists.rc != 0

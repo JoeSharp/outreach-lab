@@ -1,64 +1,73 @@
-- name: Import NICE DCV GPG key
-  become: true
-  get_url:
-    url: https://d1uj6qtbmh3dt5.cloudfront.net/NICE-GPG-KEY
-    dest: /tmp/NICE-GPG-KEY
+- name: Check if DCV is installed
+  command: which dcv
+  register: dcv_exists
+  failed_when: false
+  changed_when: false
 
-- name: Convert GPG key
-  become: true
-  shell: |
-    gpg --dearmor < /tmp/NICE-GPG-KEY > /usr/share/keyrings/nice-dcv.gpg
-  args:
-    executable: /bin/bash
+- block:
+  - name: Import NICE DCV GPG key
+    become: true
+    get_url:
+      url: https://d1uj6qtbmh3dt5.cloudfront.net/NICE-GPG-KEY
+      dest: /tmp/NICE-GPG-KEY
 
-- name: Remove raw key file
-  become: true
-  file:
-    path: /tmp/NICE-GPG-KEY
-    state: absent
+  - name: Convert GPG key
+    become: true
+    shell: |
+      gpg --dearmor < /tmp/NICE-GPG-KEY > /usr/share/keyrings/nice-dcv.gpg
+    args:
+      executable: /bin/bash
 
-- name: Download DCV server bundle
-  become: true
-  get_url:
-    url: https://d1uj6qtbmh3dt5.cloudfront.net/2024.0/Servers/nice-dcv-2024.0-19030-ubuntu2204-x86_64.tgz
-    dest: /tmp/dcv.tgz
+  - name: Remove raw key file
+    become: true
+    file:
+      path: /tmp/NICE-GPG-KEY
+      state: absent
 
-- name: Extract DCV bundle
-  become: true
-  unarchive:
-    src: /tmp/dcv.tgz
-    dest: /tmp/
-    remote_src: yes
+  - name: Download DCV server bundle
+    become: true
+    get_url:
+      url: https://d1uj6qtbmh3dt5.cloudfront.net/2024.0/Servers/nice-dcv-2024.0-19030-ubuntu2204-x86_64.tgz
+      dest: /tmp/dcv.tgz
 
-- name: Find DCV packages
-  become: true
-  find:
-    paths: /tmp/nice-dcv-2024.0-19030-ubuntu2204-x86_64
-    patterns:
-      - "nice-dcv-server_*.deb"
-      - "nice-dcv-web-viewer_*.deb"
-      - "nice-xdcv_*.deb"
-      - "nice-dcv-gl_*.deb"
-  register: dcv_pkgs
+  - name: Extract DCV bundle
+    become: true
+    unarchive:
+      src: /tmp/dcv.tgz
+      dest: /tmp/
+      remote_src: yes
 
-- name: Install DCV packages
-  become: true
-  apt:
-    deb: "{{ item.path }}"
-  loop: "{{ dcv_pkgs.files }}"
+  - name: Find DCV packages
+    become: true
+    find:
+      paths: /tmp/nice-dcv-2024.0-19030-ubuntu2204-x86_64
+      patterns:
+        - "nice-dcv-server_*.deb"
+        - "nice-dcv-web-viewer_*.deb"
+        - "nice-xdcv_*.deb"
+        - "nice-dcv-gl_*.deb"
+    register: dcv_pkgs
 
-- name: Mask colord and xiccd
-  become: true
-  systemd:
-    name: "{{ item }}"
-    masked: yes
-  loop:
-    - colord.service
-    - xiccd.service
+  - name: Install DCV packages
+    become: true
+    apt:
+      deb: "{{ item.path }}"
+    loop: "{{ dcv_pkgs.files }}"
 
-- name: Enable and start DCV server
-  become: true
-  systemd:
-    name: dcvserver
-    enabled: yes
-    state: started
+  - name: Mask colord and xiccd
+    become: true
+    systemd:
+      name: "{{ item }}"
+      masked: yes
+    loop:
+      - colord.service
+      - xiccd.service
+
+  - name: Enable and start DCV server
+    become: true
+    systemd:
+      name: dcvserver
+      enabled: yes
+      state: started
+
+  when: dcv_exists.rc != 0

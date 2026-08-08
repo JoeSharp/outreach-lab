@@ -17,3 +17,9 @@ variable "key_name" {
   description = "Name of your AWS EC2 key pair"
   type        = string
 }
+
+variable "root_volume_size" {
+  description = "Size of the root EBS volume in GB"
+  type        = number
+  default     = 50
+}

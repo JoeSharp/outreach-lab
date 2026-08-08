@@ -3,6 +3,9 @@
   apt:
     update_cache: yes
 
+- name: Password 
+  include_tasks: password.yml
+
 - name: wget
   include_tasks: wget.yml
 
@@ -26,3 +29,15 @@
 
 - name: Golang
   include_tasks: golang.yml
+
+- name: Node.js
+  include_tasks: nodejs.yml
+
+- name: Rust
+  include_tasks: rust.yml
+
+- name: VSCode
+  include_tasks: vscode.yml
+
+- name: Docker
+  include_tasks: docker.yml

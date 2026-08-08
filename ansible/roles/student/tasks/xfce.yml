@@ -1,8 +1,0 @@
-- name: Configure XFCE session
-  become: true
-  copy:
-    dest: /home/{{ student_user }}/.xsession
-    content: exec startxfce4
-    owner: "{{ student_user }}"
-    group: "{{ student_user }}"
-    mode: '0644'

@@ -1,11 +1,12 @@
 - hosts: lab
-  gather_facts: false
+  gather_facts: true
+  strategy: free
   roles:
     - role: ping
       tags: ping
     - role: tools
       tags: tools
-    - role: student
-      tags: student
+    - role: dcv-session
+      tags: dcv-session
     - role: repo
       tags: repo

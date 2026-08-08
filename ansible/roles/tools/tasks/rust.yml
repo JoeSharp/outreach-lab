@@ -1,0 +1,14 @@
+- name: Check if Cargo (Rust) is installed
+  command: which cargo
+  register: rust_exists
+  failed_when: false
+  changed_when: false
+
+- block:
+  - name: Install Rust via rustup
+    become: false
+    shell: |
+      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    args:
+      executable: /bin/bash
+  when: rust_exists.rc != 0

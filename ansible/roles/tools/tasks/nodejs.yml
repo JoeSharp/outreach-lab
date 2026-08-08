@@ -1,0 +1,31 @@
+- name: Check if NVM is installed
+  stat:
+    path: "/home/{{ student_user }}/.nvm/nvm.sh"
+  register: nvm_stat
+
+- block:
+  - name: Check if NVM is installed
+    become: true
+    become_user: "{{ student_user }}"
+    stat:
+      path: /home/{{ student_user }}/.nvm/nvm.sh
+    register: nvm_installed
+
+  - name: Install NVM
+    become: true
+    become_user: "{{ student_user }}"
+    shell: |
+      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+    args:
+      executable: /bin/bash
+    when: not nvm_installed.stat.exists
+
+  - name: Add NVM init to .bashrc
+    become: true
+    become_user: "{{ student_user }}"
+    lineinfile:
+      path: "/home/{{ student_user }}/.bashrc"
+      line: 'export NVM_DIR="$HOME/.nvm"; [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'
+      insertafter: EOF
+      
+  when: not nvm_stat.stat.exists
