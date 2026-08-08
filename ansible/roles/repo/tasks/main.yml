@@ -1,0 +1,8 @@
+- name: Clone repo
+  include_tasks: clone.yml
+
+- name: Install Node for Project
+  include_tasks: node.yml
+
+- name: Initial builds
+  include_tasks: initial-build.yml

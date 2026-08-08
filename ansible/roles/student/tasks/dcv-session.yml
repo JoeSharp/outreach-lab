@@ -1,0 +1,20 @@
+- name: Wait for DCV broker
+  shell: dcv list-sessions
+  register: dcv_ready
+  retries: 10
+  delay: 2
+  until: dcv_ready.rc == 0
+
+- name: Check if DCV session exists
+  shell: dcv list-sessions | grep -q student-session
+  register: dcv_session_exists
+  failed_when: false
+  changed_when: false
+  become_user: "{{ student_user }}"
+
+- name: Create DCV session for student
+  command: "dcv create-session {{ student_user }}"
+  args:
+    creates: "/var/run/dcv/session/{{ student_user }}"
+  become_user: "{{ student_user }}"
+  when: dcv_session_exists.rc != 0

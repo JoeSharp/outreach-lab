@@ -1,0 +1,9 @@
+- name: Run project justfile
+  become: false
+  shell: |
+    export NVM_DIR="$HOME/.nvm"
+    source "$NVM_DIR/nvm.sh"
+    just build
+  args:
+    chdir: /home/ubuntu/git/iig-fusion.github.io
+    executable: /bin/bash

@@ -1,0 +1,8 @@
+- name: Create student user
+  become: true
+  user:
+    name: student
+    shell: /bin/bash
+    create_home: yes
+    password: "{{ 'student' | password_hash('sha512') }}"
+

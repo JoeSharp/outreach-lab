@@ -1,0 +1,11 @@
+- hosts: lab
+  gather_facts: false
+  roles:
+    - role: ping
+      tags: ping
+    - role: tools
+      tags: tools
+    - role: student
+      tags: student
+    - role: repo
+      tags: repo

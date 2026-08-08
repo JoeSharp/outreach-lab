@@ -1,0 +1,6 @@
+- name: Install build essentials
+  become: true
+  apt:
+    name: build-essential
+    state: present
+    update_cache: yes

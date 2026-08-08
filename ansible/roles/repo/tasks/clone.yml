@@ -1,0 +1,7 @@
+- name: Clone repo
+  become: false
+  git:
+    repo: https://github.com/IIG-FUSION/iig-fusion.github.io.git
+    dest: /home/ubuntu/git/iig-fusion.github.io
+    version: main
+    accept_hostkey: yes

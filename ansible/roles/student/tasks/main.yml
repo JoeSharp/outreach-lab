@@ -1,0 +1,11 @@
+- name: Create user 
+  include_tasks: user.yml
+
+- name: Configure XFCE session
+  include_tasks: xfce.yml
+
+- name: NVM
+  include_tasks: nvm.yml
+
+- name: DCV Session
+  include_tasks: dcv-session.yml

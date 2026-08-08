@@ -1,0 +1,8 @@
+- name: Install XFCE
+  become: true
+  apt:
+    name:
+      - xfce4
+      - xfce4-goodies
+      - x11-xserver-utils
+    state: present

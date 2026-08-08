@@ -1,0 +1,28 @@
+- name: Update APT cache
+  become: true
+  apt:
+    update_cache: yes
+
+- name: wget
+  include_tasks: wget.yml
+
+- name: XFCE
+  include_tasks: xfce.yml
+
+- name: Git
+  include_tasks: git.yml
+
+- name: Build essentials
+  include_tasks: build-essentials.yml
+
+- name: Just
+  include_tasks: just.yml
+
+- name: Firefox
+  include_tasks: firefox.yml
+
+- name: DCV
+  include_tasks: dcv.yml
+
+- name: Golang
+  include_tasks: golang.yml

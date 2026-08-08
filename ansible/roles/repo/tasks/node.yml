@@ -1,0 +1,19 @@
+- name: Install Node version from .nvmrc
+  become: false
+  shell: |
+    export NVM_DIR="$HOME/.nvm"
+    source "$NVM_DIR/nvm.sh"
+    nvm install
+  args:
+    chdir: /home/ubuntu/git/iig-fusion.github.io
+    executable: /bin/bash
+
+- name: Set default Node version to .nvmrc version
+  become: false
+  shell: |
+    export NVM_DIR="$HOME/.nvm"
+    source "$NVM_DIR/nvm.sh"
+    nvm alias default $(cat .nvmrc)
+  args:
+    chdir: /home/ubuntu/git/iig-fusion.github.io
+    executable: /bin/bash

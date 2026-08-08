@@ -1,0 +1,39 @@
+- name: Add Go to PATH for all users
+  become: true
+  copy:
+    dest: "{{ go_profile_script }}"
+    mode: '0644'
+    content: |
+      export PATH=$PATH:/usr/local/go/bin
+
+- name: Ensure Go workspace exists for student
+  become: true
+  file:
+    path: "/home/{{ student_user }}/go"
+    state: directory
+    owner: "{{ student_user }}"
+    group: "{{ student_user }}"
+
+- name: Add GOPATH and PATH for both users
+  become: true
+  lineinfile:
+    path: "{{ item }}/.bashrc"
+    line: |
+      export GOPATH=$HOME/go
+      export PATH=$PATH:/usr/local/go/bin
+    insertafter: EOF
+  loop:
+    - "/home/{{ student_user }}"
+    - "/home/{{ ansible_user }}"
+    - "/root"
+
+- name: Add GOPATH to student shell
+  become: true
+  lineinfile:
+    path: "/home/{{ student_user }}/.bashrc"
+    line: 'export GOPATH=$HOME/go'
+    insertafter: EOF
+  loop:
+    - "/home/{{ student_user }}"
+    - "/home/{{ ansible_user }}"
+    - "/root"
