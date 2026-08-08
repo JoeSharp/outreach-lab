@@ -1,0 +1,6 @@
+- name: Install AWS CLI
+  become: true
+  apt:
+    name: awscli
+    state: present
+    update_cache: yes

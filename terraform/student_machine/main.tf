@@ -23,7 +23,7 @@ resource "aws_iam_policy" "dcv_license_access" {
       {
            "Effect": "Allow",
            "Action": "s3:GetObject",
-           "Resource": "arn:aws:s3:::dcv-license.region/*"
+           "Resource": "arn:aws:s3:::dcv-license.eu-west-2/*"
        }
     ]
   })

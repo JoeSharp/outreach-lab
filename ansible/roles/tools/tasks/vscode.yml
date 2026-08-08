@@ -24,16 +24,23 @@
       state: present
       update_cache: yes
 
+  - name: Ensure VS Code directories exist
+    become: true
+    become_user: "{{ student_user }}"
+    file:
+      path: "/home/{{ student_user }}/.vscode/extensions"
+      state: directory
+      mode: "0755"
+
   - name: Install VS Code extensions
     become: true
     become_user: "{{ student_user }}"
-    shell: |
-      code --install-extension rust-lang.rust-analyzer
-      code --install-extension golang.go
-      code --install-extension ms-azuretools.vscode-docker
-      code --install-extension dbaeumer.vscode-eslint
-      code --install-extension esbenp.prettier-vscode
-    args:
-      creates: "/home/{{ student_user }}/.vscode/extensions"
+    shell: "/usr/bin/code --install-extension {{ item }}"
+    loop:
+      - rust-lang.rust-analyzer
+      - golang.go
+      - ms-azuretools.vscode-docker
+      - dbaeumer.vscode-eslint
+      - esbenp.prettier-vscode
 
   when: code_exists.rc != 0
