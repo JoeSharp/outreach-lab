@@ -18,6 +18,8 @@ give it contents such as this
 key_name        = "my-student-key"
 ssh_public_key_path = "~/.ssh/my_student_lab_key.pub"
 ssh_private_key_path = "~/.ssh/my_student_lab_key.pub"
+dns_zone_id = "Z0330107OSB54ZK2JBIG"
+dns_root_domain = "joesharpcs.co.uk"
 
 ```
 
@@ -82,6 +84,10 @@ Still useful, and I imagine doing this as the 'teacher' when the students are on
 
 ```
 ssh -i ~/.ssh/<your key file> ubuntu@<ip address from stack>
+
+# or if DNS resolution has worked (replace values as required)
+
+ssh -i ~/.ssh/<your key file> ubuntu@student01.joesharpcs.co.uk
 ```
 
 Then dump the init script logs with
@@ -97,6 +103,7 @@ Creating the certificate (the spec of folders is so you don't have to run as roo
 ```bash
 certbot certonly \
   --manual \
+  --key-type rsa \
   --preferred-challenges dns \
   --config-dir ~/.certbot \
   --work-dir ~/.certbot \

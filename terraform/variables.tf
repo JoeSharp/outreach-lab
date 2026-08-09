@@ -37,5 +37,5 @@ variable "dns_root_domain" {
 
 variable "students" {
   type    = list(string)
-  default = ["student01", "student02"]
+  default = ["joe"]
 }

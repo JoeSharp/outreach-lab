@@ -1,0 +1,24 @@
+- name: Install nginx
+  become: true
+  apt:
+    name: nginx
+    state: present
+  notify: reload nginx
+
+- name: Deploy DCV reverse proxy config
+  become: true
+  template:
+    src: dcv.conf.j2
+    dest: /etc/nginx/sites-available/dcv.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: reload nginx
+
+- name: Enable DCV proxy site
+  become: true
+  file:
+    src: /etc/nginx/sites-available/dcv.conf
+    dest: /etc/nginx/sites-enabled/dcv.conf
+    state: link
+  notify: reload nginx

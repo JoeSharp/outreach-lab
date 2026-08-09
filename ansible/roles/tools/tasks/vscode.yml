@@ -5,16 +5,16 @@
   changed_when: false
 
 - block:
-  - name: Add Microsoft GPG key
+  - name: Add VS Code repository (deb822)
     become: true
-    apt_key:
-      url: https://packages.microsoft.com/keys/microsoft.asc
-      state: present
-
-  - name: Add VS Code repository
-    become: true
-    apt_repository:
-      repo: "deb [arch=amd64] https://packages.microsoft.com/repos/code stable main"
+    deb822_repository:
+      name: vscode
+      types: [deb]
+      uris: https://packages.microsoft.com/repos/code
+      suites: [stable]
+      components: [main]
+      architectures: [amd64]
+      signed_by: https://packages.microsoft.com/keys/microsoft.asc
       state: present
 
   - name: Install VS Code

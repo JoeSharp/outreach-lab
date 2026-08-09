@@ -1,0 +1,29 @@
+- name: Copy DCV private key
+  become: true
+  copy:
+    src: privkey.pem
+    dest: /etc/dcv/dcv.key
+    owner: dcv
+    group: dcv
+    mode: '0600'
+
+- name: Copy DCV certificate chain
+  become: true
+  copy:
+    src: fullchain.pem
+    dest: /etc/dcv/dcv.pem
+    owner: dcv
+    group: dcv
+    mode: '600'
+
+- name: Template DCV config
+  become: true
+  template:
+    src: dcv.conf.j2
+    dest: /etc/dcv/dcv.conf
+
+- name: Restart DCV
+  become: true
+  systemd:
+    name: dcvserver
+    state: restarted

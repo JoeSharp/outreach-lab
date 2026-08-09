@@ -6,7 +6,11 @@
       tags: ping
     - role: tools
       tags: tools
+    - role: dcv-certificates
+      tags: dcv-certificates
     - role: dcv-session
-      tags: dcv-session
+      tags: dcv-session, dcv-certificates
     - role: repo
       tags: repo
+    - role: nginx-dcv-proxy
+      tags: nginx-dcv-proxy
