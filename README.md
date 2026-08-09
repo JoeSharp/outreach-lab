@@ -18,6 +18,7 @@ give it contents such as this
 key_name        = "my-student-key"
 ssh_public_key_path = "~/.ssh/my_student_lab_key.pub"
 ssh_private_key_path = "~/.ssh/my_student_lab_key.pub"
+
 ```
 
 ## Running Terraform
@@ -87,4 +88,26 @@ Then dump the init script logs with
 
 ```
 sudo cat /var/log/cloud-init-output.log
+```
+
+## Provisioning HTTPS
+
+Creating the certificate (the spec of folders is so you don't have to run as root)
+
+```bash
+certbot certonly \
+  --manual \
+  --preferred-challenges dns \
+  --config-dir ~/.certbot \
+  --work-dir ~/.certbot \
+  --logs-dir ~/.certbot \
+  -d "*.joesharpcs.co.uk"
+```
+
+Figure out AWS hosted zones
+
+Ignore the "/hostedzone/" on the front of the ID.
+
+```bash
+aws route53 list-hosted-zones
 ```

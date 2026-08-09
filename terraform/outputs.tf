@@ -5,6 +5,6 @@ output "lab_dcv_urls" {
 
 output "lab_public_ips" {
   description = "Public IP addresses of Lab Machines"
-  value = [for s in module.student_lab : s.instance_public_ip]
+  value = [for s in module.student_lab : s.public_ip]
 }
 

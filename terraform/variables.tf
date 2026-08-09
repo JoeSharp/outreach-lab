@@ -24,3 +24,18 @@ variable "key_name" {
   description = "Name of your AWS EC2 key pair"
   type        = string
 }
+
+variable "dns_zone_id" {
+  description = "Route 53 Hosted Zone ID"
+  type        = string
+}
+
+variable "dns_root_domain" {
+  description = "The root domain to use for all lab machines"
+  type        = string
+}
+
+variable "students" {
+  type    = list(string)
+  default = ["student01", "student02"]
+}

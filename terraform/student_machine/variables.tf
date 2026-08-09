@@ -1,4 +1,4 @@
-variable "instance_id" {
+variable "student_name" {
   description = "The ID of the instance within the lab"
   type        = string
 }
@@ -10,6 +10,11 @@ variable "security_group_id" {
 
 variable "instance_type" {
   description = "EC2 instance type"
+  type        = string
+}
+
+variable "instance_profile" {
+  description = "EC2 IAM instance profile"
   type        = string
 }
 
