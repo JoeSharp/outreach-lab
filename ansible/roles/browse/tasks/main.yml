@@ -1,0 +1,4 @@
+- name: Open Firefox inside DCV session
+  become: true
+  ansible.builtin.shell: |
+    dcv run-session mysession -- firefox https://glastonbury.seetickets.com

@@ -80,6 +80,7 @@ module "student_lab" {
   student_name      = each.key
   key_name          = aws_key_pair.student_key.key_name
   instance_profile  = aws_iam_instance_profile.ec2_profile.name
+  root_volume_size  = var.root_volume_size
 
   providers = {
     aws = aws

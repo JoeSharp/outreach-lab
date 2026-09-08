@@ -2,15 +2,19 @@
   gather_facts: true
   strategy: free
   roles:
+    - role: desktop
+      tags: desktop
     - role: ping
       tags: ping
-    - role: tools
-      tags: tools
+    - role: dev-tools
+      tags: dev-tools
     - role: dcv-certificates
-      tags: dcv-certificates
+      tags: dcv-certificates, desktop
     - role: dcv-session
-      tags: dcv-session, dcv-certificates
+      tags: dcv-session, dcv-certificates, desktop
     - role: repo
       tags: repo
     - role: nginx-dcv-proxy
-      tags: nginx-dcv-proxy
+      tags: nginx-dcv-proxy, desktop
+    - role: browse
+      tags: glasto

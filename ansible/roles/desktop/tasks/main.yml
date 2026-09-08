@@ -1,0 +1,19 @@
+- name: Update APT cache
+  become: true
+  apt:
+    update_cache: yes
+
+- name: Password 
+  include_tasks: password.yml
+
+- name: wget
+  include_tasks: wget.yml
+
+- name: XFCE
+  include_tasks: xfce.yml
+
+- name: Firefox
+  include_tasks: firefox.yml
+
+- name: DCV
+  include_tasks: dcv.yml

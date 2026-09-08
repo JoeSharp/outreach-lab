@@ -10,7 +10,7 @@ First, login to AWS, this is how I currently start it, but...you may do it anoth
 aws sso login
 ```
 
-Create a file in the same directory `terraform.tfvars`
+Create a file `terraform/terraform.tfvars`
 
 give it contents such as this
 
@@ -23,11 +23,22 @@ dns_root_domain = "joesharpcs.co.uk"
 
 ```
 
+### Figure out AWS hosted zones
+
+Ignore the "/hostedzone/" on the front of the ID.
+
+```bash
+aws route53 list-hosted-zones
+```
+
 ## Running Terraform
 
 Inside the `terraform` directory.
 
 ```bash
+# Inside the Terraform directory
+cd terraform
+
 # Run once to sort out the backend
 terraform init
 
@@ -36,6 +47,9 @@ terraform plan
 
 # Actually do the business
 terraform apply
+
+# Delete everything once done
+terraform destroy
 ```
 
 ## Checking the Machine manually
@@ -72,6 +86,8 @@ ssh on with
 Once the terraform has applied, it should have created an inventory in `ansible/inventory.ini` and the setup to connect in `ansible/group_vars/lab.yml`
 
 ```bash
+cd ansible
+
 ansible-playbook -i inventory.ini main.yml
 
 # or to just run a specific sub part
@@ -111,10 +127,8 @@ certbot certonly \
   -d "*.joesharpcs.co.uk"
 ```
 
-Figure out AWS hosted zones
+Then copy the created files into `ansible/roles/dcv-certificates/files`
+These two will need to exist
 
-Ignore the "/hostedzone/" on the front of the ID.
-
-```bash
-aws route53 list-hosted-zones
-```
+- privkey.pem
+- fullchain.pem
