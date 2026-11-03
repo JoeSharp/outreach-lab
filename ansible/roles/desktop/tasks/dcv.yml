@@ -63,11 +63,11 @@
       - colord.service
       - xiccd.service
 
-  - name: Enable and start DCV server
-    become: true
-    systemd:
-      name: dcvserver
-      enabled: yes
-      state: started
-
   when: dcv_exists.rc != 0
+
+- name: Ensure DCV server is enabled and running
+  become: true
+  systemd:
+    name: dcvserver
+    enabled: yes
+    state: started
