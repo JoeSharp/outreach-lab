@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
-  default     = "t3.small"
+  default     = "t3.medium"
 }
 
 variable "ssh_public_key_path" {
@@ -37,7 +37,7 @@ variable "dns_root_domain" {
 
 variable "students" {
   type    = list(string)
-  default = ["anita"]
+  default = ["kirill", "hazel"]
 }
 
 variable "root_volume_size" {

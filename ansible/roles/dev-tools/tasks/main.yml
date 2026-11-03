@@ -12,9 +12,6 @@
 - name: Just
   include_tasks: just.yml
 
-- name: DCV
-  include_tasks: dcv.yml
-
 - name: Golang
   include_tasks: golang.yml
 

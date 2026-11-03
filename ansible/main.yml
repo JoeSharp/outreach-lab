@@ -16,5 +16,3 @@
       tags: repo
     - role: nginx-dcv-proxy
       tags: nginx-dcv-proxy, desktop
-    - role: browse
-      tags: glasto
