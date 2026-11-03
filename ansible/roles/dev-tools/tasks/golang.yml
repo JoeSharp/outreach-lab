@@ -1,6 +1,73 @@
 - name: Install Go
   become: true
-  apt:
-    name: golang-go
-    state: present
-    update_cache: yes
+  vars:
+    golang_version: "1.27.3"
+    golang_sha256: "65efbc80fdc1fa2cd2631cad5b481777a68e8725f34e89f50fc6ac714e379b40"
+    golang_archive: "go{{ golang_version }}.linux-amd64.tar.gz"
+    golang_install_dir: "/opt/go-{{ golang_version }}"
+  block:
+    - name: Remove Ubuntu Go package
+      ansible.builtin.apt:
+        name: golang-go
+        state: absent
+
+    - name: Download Go archive
+      ansible.builtin.get_url:
+        url: "https://go.dev/dl/{{ golang_archive }}"
+        dest: "/tmp/{{ golang_archive }}"
+        checksum: "sha256:{{ golang_sha256 }}"
+        mode: "0644"
+
+    - name: Ensure Go installation directory exists
+      ansible.builtin.file:
+        path: "{{ golang_install_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Extract Go
+      ansible.builtin.unarchive:
+        src: "/tmp/{{ golang_archive }}"
+        dest: "{{ golang_install_dir }}"
+        remote_src: true
+        extra_opts:
+          - --strip-components=1
+        creates: "{{ golang_install_dir }}/bin/go"
+
+    - name: Inspect active Go installation
+      ansible.builtin.stat:
+        path: /usr/local/go
+        follow: false
+      register: golang_active_install
+
+    - name: Remove previous Go installation directory
+      ansible.builtin.file:
+        path: /usr/local/go
+        state: absent
+      when:
+        - golang_active_install.stat.exists
+        - not golang_active_install.stat.islnk
+
+    - name: Link active Go installation
+      ansible.builtin.file:
+        src: "{{ golang_install_dir }}"
+        dest: /usr/local/go
+        state: link
+
+    - name: Link Go commands into the system path
+      ansible.builtin.file:
+        src: "/usr/local/go/bin/{{ item }}"
+        dest: "/usr/local/bin/{{ item }}"
+        state: link
+      loop:
+        - go
+        - gofmt
+
+    - name: Add Go to the system profile
+      ansible.builtin.copy:
+        dest: /etc/profile.d/golang.sh
+        content: |
+          export GOROOT=/usr/local/go
+          export PATH="$GOROOT/bin:$PATH"
+        owner: root
+        group: root
+        mode: "0644"
